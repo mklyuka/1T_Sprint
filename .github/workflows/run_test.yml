@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Checkout repository # скачиваем код в наш контейнер
         # для использования предустановленных шагов используем uses
-        uses: actions/checkout@v3 # из actions берем ф-цию checkout третьей версии
+        uses: actions/checkout@v3 # из actions берем функцию checkout третьей версии
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
