@@ -1,0 +1,40 @@
+name: Test-box # задаем имя
+
+# указываем, при каких условиях будет запускаться авто-тест
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: Choose target
+        required: true
+        default:
+        type: choice
+        options:
+          - Test_box
+          - Wrong_email
+
+# пишем алгоритм запуска тестов
+jobs:
+  test:
+    runs-on:  ubuntu-latest # указываем, что хотим установить последнюю версию ubuntu
+
+    # описываем шаги для запуска тестов
+    steps:
+      - name: Checkout repository # скачиваем код в наш контейнер
+        # для использования предустановленных шагов используем uses
+        uses: actions/checkout@v3 # из actions берем ф-цию checkout третьей версии
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+        # пишем шаги самостоятельно
+      - name: Install Chrome
+        run: sudo apt-get install google-chrome-stable
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Test_box
+        if: "github.event.inputs.deployment_target == 'Test_box'"
+        run: python 1_Text_box/1_Text_box_HL.py
+      - name: Test_box_wrong_email
+        if: "github.event.inputs.deployment_target == 'Wrong_email'"
+        run: python 1_Text_box/2_Wrong_email_HL.py
